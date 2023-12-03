@@ -34,7 +34,7 @@ const Profile = (props) => {
 
   return (
     <div {...rest} className={clsx(classes.root, className)}>
-      <Avatar alt="Person" className={classes.avatar} component={RouterLink} src={user.avatar} to="/settings" />
+      <Avatar alt="Person" className={classes.avatar} component={RouterLink} src={user.avatar} to="/dashboard" />
       <Typography className={classes.name} variant="h4">
         {user.name}
       </Typography>
