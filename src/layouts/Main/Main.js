@@ -5,6 +5,7 @@ import { makeStyles } from '@material-ui/styles';
 
 import palette from '../../theme/palette';
 import { Sidebar } from './components';
+import { useLocation } from 'react-router-dom/cjs/react-router-dom.min';
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -18,6 +19,9 @@ const useStyles = makeStyles(() => ({
 
 const Main = (props) => {
   const { children } = props;
+  const location = useLocation();
+
+  const isLoginPage = location.pathname === '/login';
 
   const classes = useStyles();
   const isDesktop = true;
@@ -26,10 +30,10 @@ const Main = (props) => {
     <div
       className={clsx({
         [classes.root]: true,
-        [classes.shiftContent]: isDesktop,
+        [classes.shiftContent]: isDesktop && !isLoginPage,
       })}
     >
-      <Sidebar onClose={() => {}} open variant={isDesktop ? 'persistent' : 'temporary'} />
+      <Sidebar onClose={() => {}} open={!isLoginPage} variant={isDesktop ? 'persistent' : 'temporary'} />
       <main className={classes.content}>{children}</main>
     </div>
   );

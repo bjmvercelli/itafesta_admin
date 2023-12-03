@@ -7,7 +7,7 @@ import { Main } from './layouts';
 const useStyles = makeStyles((theme) => ({
   root: {
     padding: 32,
-    height: 'calc(100vh - 64px)',
+    height: '100vh',
   },
   "@global": {
     "body, html": {

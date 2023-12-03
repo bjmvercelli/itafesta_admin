@@ -5,6 +5,7 @@ import { makeStyles } from "@material-ui/styles";
 import { Button, Form, Modal, Table, notification } from "antd";
 import { DeleteOutline, EditOutlined } from "@material-ui/icons";
 import SupplierModalForm from "../components/SupplierModalForm";
+import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -33,6 +34,7 @@ const useStyles = makeStyles((theme) => ({
 
 const DataTablePage = () => {
   const classes = useStyles();
+  const history = useHistory();
   const [api, contextHolder] = notification.useNotification();
 
   const [form] = Form.useForm();
@@ -107,6 +109,15 @@ const DataTablePage = () => {
     handleFetch();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => {
+    const login = localStorage.getItem('login');
+    if (!login) {
+      history.push('/login');
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
 
   const showNotification = (type, message, description) => {
     api[type]({

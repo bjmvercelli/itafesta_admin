@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Grid } from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
 
 import KPIChart from '../components/KPIChart';
 import BarChart from '../components/BarChart.js';
 import DoughnutChart from '../components/DoughnutChart.js';
+import { useHistory } from 'react-router-dom/cjs/react-router-dom.min.js';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -70,6 +71,17 @@ const doughnutChartQuery = {
 
 const Dashboard = () => {
   const classes = useStyles();
+  const history = useHistory();
+
+  useEffect(() => {
+    const login = localStorage.getItem('login');
+    if (!login) {
+      history.push('/login');
+    }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
     <div className={classes.root}>
       <Grid container spacing={4}>
