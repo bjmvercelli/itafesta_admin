@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useState } from "react";
 import { makeStyles } from "@material-ui/styles";
 
 // import Table from '../components/Table.js';
-import { Button, Form, Modal, Table, notification } from "antd";
+import { Button, Form, Input, Modal, Table, notification } from "antd";
 import { DeleteOutline, EditOutlined } from "@material-ui/icons";
 import SupplierModalForm from "../components/SupplierModalForm";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
@@ -14,12 +14,20 @@ const useStyles = makeStyles((theme) => ({
   header: {
     marginBottom: 15,
     display: "flex",
-    justifyContent: "flex-end",
+    justifyContent: "space-between",
+    alignItems: "flex-end",
+    height: 40,
 
-    "& button": {
+    "& > button": {
       width: 200,
       height: 40,
+      marginBottom: 0,
       // padding: 0,
+    },
+
+    "& .ant-input-search-button": {
+      height: 40,
+      margin: 0,
     },
   },
   content: {
@@ -44,7 +52,6 @@ const DataTablePage = () => {
   const [showModal, setShowModal] = useState(false);
   const [initialValues, setInitialValues] = useState({});
   const [loading, setLoading] = useState(false);
-
 
   const columns = [
     {
@@ -111,13 +118,12 @@ const DataTablePage = () => {
   }, []);
 
   useEffect(() => {
-    const login = localStorage.getItem('login');
+    const login = localStorage.getItem("login");
     if (!login) {
-      history.push('/login');
+      history.push("/login");
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
 
   const showNotification = (type, message, description) => {
     api[type]({
@@ -234,6 +240,28 @@ const DataTablePage = () => {
       .catch((error) => console.log(error));
   };
 
+  const handleSearch = (value) => {
+    setLoading(true);
+    fetch("https://redes-8ac53ee07f0c.herokuapp.com/api/v1/fornecedores")
+      .then((response) => response.json())
+      .then((response) => {
+        const filteredData = response.data?.filter((item) =>
+          item.nome.toLowerCase().includes(value.toLowerCase())
+        );
+
+        setData(filteredData);
+      })
+      .catch((error) => {
+        console.log(error);
+        showNotification(
+          "error",
+          "Erro ao filtrar fornecedores!",
+          "Ocorreu um erro ao filtrar os fornecedores!"
+        );
+      })
+      .finally(() => setLoading(false));
+  };
+
   const GetModal = useCallback(() => {
     if (showModal === "create") {
       return (
@@ -295,6 +323,11 @@ const DataTablePage = () => {
       {contextHolder}
       <div className={classes.content}>
         <div className={classes.header}>
+          <Input.Search
+            placeholder="Buscar fornecedor"
+            style={{ width: "80%", borderRadius: "50%" }}
+            onSearch={(value) => handleSearch(value)}
+          />
           <Button type="primary" onClick={() => setShowModal("create")}>
             Adicionar
           </Button>
@@ -304,6 +337,12 @@ const DataTablePage = () => {
           dataSource={data}
           rowKey={(record) => record.id}
           loading={loading}
+          pagination={{
+            pageSize: 10,
+            total: data.length,
+            showSizeChanger: false,
+            showTotal: (total, range) => `${range[0]}-${range[1]} de ${total}`,
+          }}
         />
         {showModal && <GetModal />}
       </div>
