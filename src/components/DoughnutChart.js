@@ -40,7 +40,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const DoughnutChart = (props) => {
-  const { className, query, ...rest } = props;
+  const { className, donutData, ...rest } = props;
 
   const classes = useStyles();
   const theme = useTheme();
@@ -51,11 +51,13 @@ const DoughnutChart = (props) => {
     theme.palette.secondary.main,
   ];
 
-  const arr = [
-    { category: "Bolos", value: 30 },
-    { category: "Doces", value: 10 },
-    { category: "Outros", value: 70 },
-  ]
+  const arr = donutData.map((item) => {
+    return {
+      category: item.category,
+      value: item.value,
+    };
+  }
+  );
 
   const data = {
     datasets: [
@@ -72,7 +74,7 @@ const DoughnutChart = (props) => {
 
   return (
     <Card {...rest} className={clsx(classes.root, className)}>
-      <CardHeader title="Orders status" />
+      <CardHeader title="Fornecedores por tipo" />
       <Divider />
       <CardContent>
         <div className={classes.chartContainer}>
@@ -84,7 +86,7 @@ const DoughnutChart = (props) => {
               <Typography variant="body1" className={classes.title}>
                 {status.category}
               </Typography>
-              <Typography variant="h2">{status.value}%</Typography>
+              <Typography variant="h2">{status.value}</Typography>
             </div>
           ))}
         </div>

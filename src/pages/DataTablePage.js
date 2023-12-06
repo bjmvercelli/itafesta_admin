@@ -325,7 +325,7 @@ const DataTablePage = () => {
         <div className={classes.header}>
           <Input.Search
             placeholder="Buscar fornecedor"
-            style={{ width: "80%", borderRadius: "50%" }}
+            style={{ maxWidth: "800px", borderRadius: "50%" }}
             onSearch={(value) => handleSearch(value)}
           />
           <Button type="primary" onClick={() => setShowModal("create")}>

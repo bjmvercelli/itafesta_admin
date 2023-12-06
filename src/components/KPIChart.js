@@ -2,7 +2,14 @@ import React from "react";
 import clsx from "clsx";
 import PropTypes from "prop-types";
 import { makeStyles } from "@material-ui/styles";
-import { Card, CardContent, Grid, LinearProgress, Typography } from "@material-ui/core";
+import {
+  Card,
+  CardContent,
+  CircularProgress,
+  Grid,
+  LinearProgress,
+  Typography,
+} from "@material-ui/core";
 import CountUp from "react-countup";
 
 const useStyles = makeStyles((theme) => ({
@@ -42,12 +49,35 @@ const useStyles = makeStyles((theme) => ({
 
 const KPIChart = (props) => {
   const classes = useStyles();
-  const { className, title, progress, query, difference, differenceValue, duration, ...rest } =
-    props;
+  const {
+    className,
+    title,
+    progress,
+    query,
+    difference,
+    differenceValue,
+    duration,
+    ordersData,
+    isLoading,
+    ...rest
+  } = props;
 
-
-  const fullValue = 100;
+  const fullValue = Number(ordersData[query]);
   const value = (differenceValue / fullValue) * 100;
+
+  if (isLoading) {
+    return (
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        <CircularProgress color="secondary" />
+      </div>
+    );
+  }
 
   return (
     <Card {...rest} className={clsx(classes.root, className)}>
@@ -63,14 +93,13 @@ const KPIChart = (props) => {
               {title}
             </Typography>
             <Typography variant="h3">
-              %
+              {query === "totalValue" && "R$"}
               <CountUp
-                end={100}
+                end={fullValue}
                 duration={duration}
                 separator=","
-                decimals={0}
+                decimals={query === "totalValue" ? 2 : 0}
               />
-              %
             </Typography>
           </Grid>
         </Grid>

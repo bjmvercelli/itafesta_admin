@@ -15,28 +15,18 @@ const useStyles = makeStyles(() => ({
 }));
 
 const BarChart = (props) => {
-  const { className, query, dates, ...rest } = props;
+  const { className, chartData, ...rest } = props;
   const classes = useStyles();
-
-  const [dateRange, setDateRange] = React.useState(dates ? dates[0] : 'This week');
-  let queryWithDate = {
-    ...query,
-    timeDimensions: [
-      {
-        dimension: query.timeDimensions[0].dimension,
-        granularity: query.timeDimensions[0].granularity,
-        dateRange: `${dateRange}`,
-      },
-    ],
-  };
 
   return (
     <Card {...rest} className={clsx(classes.root, className)}>
-      <BarChartHeader dates={dates} dateRange={dateRange} setDateRange={setDateRange} />
+      <BarChartHeader />
       <Divider />
       <CardContent>
         <div className={classes.chartContainer}>
-          <ChartRenderer vizState={{ query: queryWithDate, chartType: 'bar' }} />
+          <ChartRenderer
+            chartData={chartData}
+          />
         </div>
       </CardContent>
     </Card>
